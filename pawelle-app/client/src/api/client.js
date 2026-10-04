@@ -50,4 +50,7 @@ export const putPhoto = (id, slot, blob) =>
     headers: { 'Content-Type': blob.type || 'application/octet-stream' },
   })
 export const deletePhoto = (id, slot) => request(`/pets/${id}/photos/${slot}`, { method: 'DELETE' })
+export const saveCheckin = (petId, date, payload) =>
+  request(`/pets/${petId}/checkins/${date}`, { method: 'PUT', json: payload })
+export const listCheckins = (petId, days = 14) => request(`/pets/${petId}/checkins?days=${days}`)
 export const photoUrl = (id, slot, version) => `/api/pets/${id}/photos/${slot}?v=${version}`

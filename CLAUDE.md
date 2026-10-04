@@ -10,7 +10,7 @@ Pawelle is a local-first, offline pet well-being companion built for the Hacktob
 
 ## Current state
 
-Everything lives in `pawelle-app/`, an npm-workspaces repo: `client/` (Vite + React 19 + Tailwind v4) and `server/` (Express + `better-sqlite3`). Feature 001 (pet profile and onboarding, photos) is implemented per `specs/001-pet-profile/`. Not built yet: check-ins, plans, Ollama and `safety.js` (the AI flow), weights, events, the four-tab nav (Today, Plan, Track, Ask). The Today screen is a placeholder shell.
+Everything lives in `pawelle-app/`, an npm-workspaces repo: `client/` (Vite + React 19 + Tailwind v4) and `server/` (Express + `better-sqlite3`). Features 001 (pet profile, onboarding, photos) and 002 (daily check-in, Track history, two-tab nav) are implemented per `specs/`. Not built yet: the AI plan flow (Ollama, text-based safety rules, plan history), weights, events, and the Plan and Ask tabs.
 
 Spec-driven workflow: the constitution is `.specify/memory/constitution.md`; each feature has `specs/NNN-name/{spec,plan,tasks}.md`. Update the spec first if behavior changes.
 
@@ -25,7 +25,9 @@ npx vitest run server/src/routes/api.test.js   # a single test file
 npx vitest run -t "completeness"     # tests by name
 ```
 
-`PORT` sets the Vite port; `PAWELLE_PORT` sets the API port (default 3001). Do not mix them up.
+`PORT` sets the Vite port; `PAWELLE_PORT` sets the API port (default 3001); `PAWELLE_DB` points the server at a different SQLite file. Do not mix them up.
+
+**Never test against `data/pawelle.db`:** it holds the owner's real data. For manual or browser testing run a second copy with its own database, e.g. `PAWELLE_DB=/tmp/test.db PAWELLE_PORT=3011 PORT=5181 npm run dev`.
 
 ## Architecture notes
 
@@ -45,3 +47,5 @@ npx vitest run -t "completeness"     # tests by name
 - **Model name comes from the `OLLAMA_MODEL` env var**; confirm the Gemma tag with `ollama list`.
 - **Depth ladder:** anything not needed for Level 0 or 1 stays off the Today screen.
 - Pawelle is not a vet; every plan carries that disclaimer.
+- **Check-ins:** one per cat per local day (`UNIQUE (pet_id, date)`), saved with an idempotent `PUT /api/pets/:id/checkins/:date`. The date is the owner's local date sent by the client; `useToday()` rolls it over after midnight. `null` = unanswered, never a default. `listRecentCheckins(db, petId, 7)` in `server/src/db/checkins.js` is the entry point for the AI plan feature.
+- **Safety rules:** `server/src/services/safety.js` holds deterministic flags `{ code, level, message }` (`attention` amber, `urgent` red). Only two consecutive "Not eating" days are red. Feature 003 should extend this file, not add a parallel one.

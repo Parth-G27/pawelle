@@ -25,6 +25,7 @@ export default function ChipGroup({ options, value, onChange }) {
     <div className="flex flex-wrap gap-2">
       {options.map((o) => (
         <Chip key={o.value} selected={value === o.value} onClick={() => onChange(value === o.value ? null : o.value)}>
+          {o.icon && <span aria-hidden="true">{o.icon}</span>}
           {o.label}
         </Chip>
       ))}

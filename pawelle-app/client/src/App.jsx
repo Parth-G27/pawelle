@@ -6,6 +6,7 @@ import PetProvider from './hooks/PetProvider.jsx'
 import { usePet } from './hooks/usePet.js'
 import PetProfile from './pages/PetProfile.jsx'
 import Today from './pages/Today.jsx'
+import Track from './pages/Track.jsx'
 import Welcome from './pages/Welcome.jsx'
 
 function Home() {
@@ -25,7 +26,7 @@ function Gate() {
   }
   if (status === 'error') {
     return (
-      <Shell showAvatar={false}>
+      <Shell showAvatar={false} nav={false}>
         <div className="mt-10 space-y-4">
           <h1 className="text-2xl font-extrabold">Pawelle is taking a nap</h1>
           <ErrorNotice message={error?.message} onRetry={reload} />
@@ -42,6 +43,7 @@ function Gate() {
       <Route path="/" element={<Home />} />
       <Route path="/welcome/:step?" element={<Welcome />} />
       <Route path="/today" element={<Today />} />
+      <Route path="/track" element={<Track />} />
       <Route path="/pet" element={<PetProfile />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

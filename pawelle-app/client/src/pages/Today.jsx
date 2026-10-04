@@ -1,8 +1,12 @@
-import { Link, Navigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { photoUrl } from '../api/client.js'
 import Avatar from '../components/Avatar.jsx'
+import CheckInCard from '../components/CheckInCard.jsx'
+import ErrorNotice from '../components/ErrorNotice.jsx'
 import Shell from '../components/Shell.jsx'
+import { useCheckins } from '../hooks/useCheckins.js'
 import { usePet } from '../hooks/usePet.js'
+import { useToday } from '../hooks/useToday.js'
 
 const greeting = (now = new Date()) => {
   const h = now.getHours()
@@ -11,7 +15,12 @@ const greeting = (now = new Date()) => {
 
 export default function Today() {
   const { pet, version } = usePet()
+  const today = useToday()
+  const location = useLocation()
+  const { status, items, error, save, reload } = useCheckins(pet?.id, 3)
   if (!pet) return <Navigate to="/welcome" replace />
+
+  const entry = items.find((i) => i.date === today)
 
   return (
     <Shell>
@@ -28,12 +37,20 @@ export default function Today() {
           </div>
         </div>
 
-        <section className="rounded-card bg-sky-soft p-5">
-          <h2 className="text-lg font-extrabold">Daily check-ins are coming next</h2>
-          <p className="mt-1">
-            Soon you’ll be able to tell Pawelle how {pet.name} is doing and get a friendly plan for food and play.
-          </p>
-        </section>
+        {status === 'loading' && (
+          <div className="h-48 animate-shimmer rounded-card bg-line" role="status" aria-label="Loading today's check-in" />
+        )}
+        {status === 'error' && <ErrorNotice message={error.message} onRetry={reload} />}
+        {status === 'ready' && (
+          <CheckInCard
+            key={today}
+            name={pet.name}
+            today={today}
+            entry={entry}
+            onSave={save}
+            startEditing={Boolean(location.state?.edit)}
+          />
+        )}
 
         {pet.next_suggestion && (
           <section className="rounded-card bg-surface p-5 shadow-card">

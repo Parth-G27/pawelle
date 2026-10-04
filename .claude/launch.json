@@ -4,7 +4,12 @@
     {
       "name": "pawelle",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "pawelle-app", "run", "dev"],
+      "runtimeArgs": [
+        "--prefix",
+        "pawelle-app",
+        "run",
+        "dev"
+      ],
       "port": 5173,
       "autoPort": true
     }

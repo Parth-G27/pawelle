@@ -8,6 +8,6 @@ export default defineConfig({
   server: {
     host: '127.0.0.1',
     port: Number(process.env.PORT) || 5173,
-    proxy: { '/api': 'http://127.0.0.1:3001' },
+    proxy: { '/api': `http://127.0.0.1:${process.env.PAWELLE_PORT || 3001}` },
   },
 })

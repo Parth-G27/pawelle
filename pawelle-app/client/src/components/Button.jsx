@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 const styles = {
   primary:
     'bg-primary text-white hover:bg-primary-dark disabled:bg-line disabled:text-muted font-bold',
@@ -11,6 +13,15 @@ export default function Button({ variant = 'primary', className = '', type = 'bu
     <button
       type={type}
       className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-base transition-colors disabled:cursor-not-allowed ${styles[variant]} ${className}`}
+      {...props}
+    />
+  )
+}
+
+export function ButtonLink({ variant = 'primary', className = '', ...props }) {
+  return (
+    <Link
+      className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-6 text-base transition-colors ${styles[variant]} ${className}`}
       {...props}
     />
   )

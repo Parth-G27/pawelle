@@ -128,7 +128,7 @@ export default function Welcome() {
 
   if (done) {
     return (
-      <Shell showAvatar={false}>
+      <Shell showAvatar={false} nav={false}>
         <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center animate-rise">
           <div className="animate-pop">
             <Avatar name={done.name} src={done.src} size={128} />
@@ -146,7 +146,7 @@ export default function Welcome() {
       : null
 
   return (
-    <Shell showAvatar={false}>
+    <Shell showAvatar={false} nav={false}>
       <div className="animate-rise">
         <div className="flex items-center justify-between">
           <StepNav step={step} onBack={() => go(step - 1)} />

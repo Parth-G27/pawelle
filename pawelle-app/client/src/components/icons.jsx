@@ -51,3 +51,13 @@ export const PawIcon = (p) => (
     <path d="M12 11c-3 0-5.5 2.7-5.5 5.2 0 1.9 1.5 2.8 3 2.8 1 0 1.6-.4 2.5-.4s1.5.4 2.5.4c1.5 0 3-.9 3-2.8C17.5 13.700 15 11 12 11z" />
   </svg>
 )
+export const HomeIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M4 11l8-7 8 7v8a1 1 0 01-1 1h-4v-6H9v6H5a1 1 0 01-1-1z" />
+  </svg>
+)
+export const TrackIcon = (p) => (
+  <svg {...base} {...p}>
+    <path d="M4 19V5M4 19h16M8 15l3-4 3 2 4-6" />
+  </svg>
+)

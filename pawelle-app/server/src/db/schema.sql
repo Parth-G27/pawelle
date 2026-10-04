@@ -26,3 +26,19 @@ CREATE TABLE IF NOT EXISTS pet_photos (
   updated_at TEXT    NOT NULL DEFAULT (datetime('now')),
   UNIQUE (pet_id, slot)
 );
+
+CREATE TABLE IF NOT EXISTS checkins (
+  id           INTEGER PRIMARY KEY,
+  pet_id       INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  date         TEXT    NOT NULL,
+  mood         TEXT,
+  appetite     TEXT,
+  energy       TEXT,
+  play_minutes INTEGER,
+  litter       TEXT,
+  note         TEXT,
+  created_at   TEXT    NOT NULL DEFAULT (datetime('now')),
+  updated_at   TEXT    NOT NULL DEFAULT (datetime('now')),
+  UNIQUE (pet_id, date)
+);
+CREATE INDEX IF NOT EXISTS idx_checkins_pet_date ON checkins (pet_id, date DESC);
