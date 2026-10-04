@@ -13,13 +13,24 @@ export const SCHEMA_VERSION = 1 + MIGRATIONS.length
 
 export const KEEP_BACKUPS = 5
 
+// The database holds a family's pet details and photos: keep it private to this user.
+// (Best effort: not every file system supports Unix permissions.)
+const lock = (target, mode) => {
+  try {
+    fs.chmodSync(target, mode)
+  } catch {
+    /* ignore */
+  }
+}
+
 // Copy an existing database file into backups/, keep only the newest few.
 export function backupDatabase(file, backupDir, keep = KEEP_BACKUPS) {
   if (!fs.existsSync(file)) return null
-  fs.mkdirSync(backupDir, { recursive: true })
+  if (fs.mkdirSync(backupDir, { recursive: true })) lock(backupDir, 0o700)
   const stamp = new Date().toISOString().replace(/[:.]/g, '-')
   const target = path.join(backupDir, `pawelle-${stamp}.db`)
   fs.copyFileSync(file, target)
+  lock(target, 0o600)
   const backups = fs
     .readdirSync(backupDir)
     .filter((f) => f.startsWith('pawelle-') && f.endsWith('.db'))
@@ -47,11 +58,12 @@ export function migrate(db, migrations = MIGRATIONS) {
 export function openDatabase({ file, backupDir } = {}) {
   const dbFile = file ?? path.join(DEFAULT_DIR, 'pawelle.db')
   if (dbFile !== ':memory:') {
-    fs.mkdirSync(path.dirname(dbFile), { recursive: true })
+    if (fs.mkdirSync(path.dirname(dbFile), { recursive: true })) lock(path.dirname(dbFile), 0o700)
     backupDatabase(dbFile, backupDir ?? path.join(path.dirname(dbFile), 'backups'))
   }
   const db = new Database(dbFile)
   db.pragma('journal_mode = WAL')
+  if (dbFile !== ':memory:') for (const suffix of ['', '-wal', '-shm']) lock(dbFile + suffix, 0o600)
   db.pragma('foreign_keys = ON')
   db.exec(fs.readFileSync(path.join(here, 'schema.sql'), 'utf8'))
   migrate(db)
