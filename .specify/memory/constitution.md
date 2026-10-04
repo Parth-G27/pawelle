@@ -32,7 +32,8 @@ Project-wide rules. Every spec, plan, task and line of code must comply. If a sp
 2. A feature not needed for Level 0 or 1 never appears on the Today screen.
 3. Prefer chips, buttons and defaults over typing. A daily check-in takes under 10 seconds.
 4. Only four nav tabs: Today, Plan, Track, Ask. Everything else lives in settings or the pet menu.
-5. Ask for the minimum. Only the pet's name and species are required; everything else is optional and improves suggestions.
+5. Ease of use is a requirement, not polish: every spec includes concrete UX criteria (steps, speed, wording, error handling) and is tested by someone who has not seen the app.
+6. Ask for the minimum. Only the pet's name and species are required; everything else is optional and improves suggestions.
 
 ## IV. Friendly and calm behavior
 
@@ -62,7 +63,8 @@ Project-wide rules. Every spec, plan, task and line of code must comply. If a sp
 | AI | Gemma (open weights) through Ollama |
 
 1. Do not add a dependency without a reason written in the plan. Prefer the platform and the standard library.
-2. Out of scope: accounts, cloud sync, photos or vision, push notifications, Redux, agent frameworks, vector databases, and anything else on the overview's Cut list.
+2. Out of scope: accounts, cloud sync, videos, AI vision or any analysis of photos, push notifications, Redux, agent frameworks, vector databases, and anything else on the overview's Cut list.
+3. Photos are allowed: at most 2 per pet, images only, stored locally with location metadata removed, and never sent to the model.
 
 ## VII. Quality bar (just enough)
 

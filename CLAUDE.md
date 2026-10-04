@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Pawelle is a local-first, offline pet well-being companion built for the Hacktoberfest 2026 Weekend Challenge ("Build for a Friend"). An open-weight model (Gemma served by Ollama) turns the owner's pet profile and check-ins into daily food, play and care recommendations. Nothing leaves the laptop.
 
-`pawelle-app/docs/OVERVIEW.md` is the source of truth for architecture, data model, API, AI flow, feature priorities (P0/P1/P2/Cut) and UI tokens. Read it before designing anything. Do not add scope from the "Cut" list (accounts, cloud sync, vision, push, agentic orchestration).
+`pawelle-app/docs/OVERVIEW.md` is the source of truth for architecture, data model, API, AI flow, feature priorities (P0/P1/P2/Cut) and UI tokens. Read it before designing anything. Do not add scope from the "Cut" list (accounts, cloud sync, videos, AI vision, push, agentic orchestration). Up to 2 local photos per pet are allowed; they are never sent to the model.
 
 ## Current state
 

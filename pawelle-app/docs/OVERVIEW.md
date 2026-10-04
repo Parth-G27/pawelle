@@ -127,7 +127,9 @@ No telemetry, no CDN, no external calls. Fonts and assets are bundled. Wi-Fi off
 | **P0** | Onboarding, pet profile, daily check-in, Today's plan (meals, play, watch-outs), plan history, Ollama health screen, vet disclaimer | 0 to 1 |
 | **P1** | Weight tracker + chart, "Can they eat this?" (static toxic list first, LLM for the rest), Ask Pawelle (short Q&A grounded in the profile), checkable plan items | 2 |
 | **P2** | Weekly meal plan, health events and reminders, printable "vet summary", JSON export and import, multi-pet, model switcher, dark mode | 2 to 3 |
-| **Cut** | Accounts, cloud sync, photos or vision, push notifications, anything agentic | n/a |
+| **Cut** | Accounts, cloud sync, videos, AI vision (photos are never analysed), push notifications, anything agentic | n/a |
+
+Photos: up to 2 local photos per pet are in scope (avatar and profile). Images only, no video, stored on the device, never sent to the model.
 
 P0 and the cheap P1 items are the one-day target. Everything else is mentioned in the post as the roadmap.
 
