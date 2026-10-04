@@ -1,0 +1,17 @@
+{
+  "meal": [
+    { "id": "routine", "text": "A steady routine keeps tummies content." },
+    { "id": "two_meals", "text": "Two meals a day suit most grown-up cats.", "appliesTo": { "stages": ["adult", "unknown"] } },
+    { "id": "small_meals", "text": "Smaller, more frequent meals suit little and older tummies.", "appliesTo": { "stages": ["kitten", "senior"] } },
+    { "id": "gentle_appetite", "text": "A calm, no-pressure mealtime can help when appetite is low.", "appliesTo": { "appetite": ["low", "none"] } },
+    { "id": "fresh_water", "text": "Fresh water by the bowl is always a good idea." }
+  ],
+  "play": [
+    { "id": "short_bursts", "text": "Short, fun bursts match how cats like to play." },
+    { "id": "energy_match", "text": "This fits {name}'s energy today.", "appliesTo": { "needsCheckin": true } },
+    { "id": "hunt_instinct", "text": "Chasing and pouncing satisfy a cat's hunting instinct." },
+    { "id": "bonding", "text": "Playing together is lovely bonding time." },
+    { "id": "gentle_senior", "text": "Gentle play keeps {name}'s body and mind happy.", "appliesTo": { "stages": ["senior"] } },
+    { "id": "cozy_calm", "text": "Quiet, cosy time is kind on a low-energy day.", "appliesTo": { "energy": ["sleepy"], "mood": ["hiding", "grumpy"], "anyOf": true } }
+  ]
+}

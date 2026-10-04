@@ -20,7 +20,8 @@ export default function Shell({ children, showAvatar = true, nav = true }) {
     <div className="min-h-screen md:flex">
       {nav && pet && <Nav />}
       <div className={`min-w-0 flex-1 ${nav && pet ? 'pb-24 md:pb-0' : ''}`}>
-        <header className="mx-auto flex max-w-xl items-center justify-between px-5 py-4">
+        <div className="sticky top-0 z-20 bg-page/70 backdrop-blur-md">
+        <header className="mx-auto flex max-w-xl items-center justify-between px-5 py-3">
           <Link to="/" aria-label="Pawelle home" className="inline-flex min-h-11 items-center">
             <Logo />
           </Link>
@@ -34,6 +35,7 @@ export default function Shell({ children, showAvatar = true, nav = true }) {
             </Link>
           )}
         </header>
+        </div>
         <main className="mx-auto max-w-xl px-5 pb-16">{children}</main>
       </div>
     </div>

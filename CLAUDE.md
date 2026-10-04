@@ -10,7 +10,7 @@ Pawelle is a local-first, offline pet well-being companion built for the Hacktob
 
 ## Current state
 
-Everything lives in `pawelle-app/`, an npm-workspaces repo: `client/` (Vite + React 19 + Tailwind v4) and `server/` (Express + `better-sqlite3`). Features 001 (pet profile, onboarding, photos) and 002 (daily check-in, Track history, two-tab nav) are implemented per `specs/`. Not built yet: the AI plan flow (Ollama, text-based safety rules, plan history), weights, events, and the Plan and Ask tabs.
+Everything lives in `pawelle-app/`, an npm-workspaces repo: `client/` (Vite + React 19 + Tailwind v4) and `server/` (Express + `better-sqlite3`). Features 001 (pet profile, onboarding, photos), 002 (daily check-in, Track history) and 003 (today's AI plan, Plan tab with history) are implemented per `specs/`. Not built yet: Ask Pawelle (spec 004, with a scope gate), weights, events, and the weekly plan.
 
 Spec-driven workflow: the constitution is `.specify/memory/constitution.md`; each feature has `specs/NNN-name/{spec,plan,tasks}.md`. Update the spec first if behavior changes.
 
@@ -21,11 +21,12 @@ npm run dev                          # server (127.0.0.1:3001) + client (Vite, :
 npm run build                        # production build of the client
 npm run lint                         # ESLint for client and server
 npm test                             # all Vitest tests (client + server)
+npm run bakeoff -w server            # real-model check (needs Ollama running): validity, retries, latency, boundary breaks
 npx vitest run server/src/routes/api.test.js   # a single test file
 npx vitest run -t "completeness"     # tests by name
 ```
 
-`PORT` sets the Vite port; `PAWELLE_PORT` sets the API port (default 3001); `PAWELLE_DB` points the server at a different SQLite file. Do not mix them up.
+`PORT` sets the Vite port; `PAWELLE_PORT` sets the API port (default 3001); `PAWELLE_DB` points the server at a different SQLite file; `OLLAMA_MODEL` (default `gemma3:1b`) and `OLLAMA_URL` (default `http://127.0.0.1:11434`, must be localhost or the server refuses to start) configure the local model. Do not mix them up.
 
 **Never test against `data/pawelle.db`:** it holds the owner's real data. For manual or browser testing run a second copy with its own database, e.g. `PAWELLE_DB=/tmp/test.db PAWELLE_PORT=3011 PORT=5181 npm run dev`.
 
@@ -49,3 +50,9 @@ npx vitest run -t "completeness"     # tests by name
 - Pawelle is not a vet; every plan carries that disclaimer.
 - **Check-ins:** one per cat per local day (`UNIQUE (pet_id, date)`), saved with an idempotent `PUT /api/pets/:id/checkins/:date`. The date is the owner's local date sent by the client; `useToday()` rolls it over after midnight. `null` = unanswered, never a default. `listRecentCheckins(db, petId, 7)` in `server/src/db/checkins.js` is the entry point for the AI plan feature.
 - **Safety rules:** `server/src/services/safety.js` holds deterministic flags `{ code, level, message }` (`attention` amber, `urgent` red). Only two consecutive "Not eating" days are red. Feature 003 should extend this file, not add a parallel one.
+- **The AI plan (feature 003) is a harness around a small model.** One prompt in, one validated answer out; no tools, agents or streaming. `gemma3:1b` invents things and writes poor free text, so it only (a) writes one summary sentence and (b) *chooses* meal times, amounts, play ideas and reasons from fixed lists in `server/src/data/` (`play-ideas.json`, `reasons.json`). The app writes the food ("her usual dry food"), the "why" text, the watch-outs and the "Good to check with your vet" notes. Do not widen the model's free-text surface without re-running `npm run bakeoff`.
+- **Order of defence** (`services/planService.js`): `planSafety` runs first and a red flag means the model is never called; then `checkPlan` (allergens and aliases, medicine and diagnosis words, numbers, links, sources, certainty claims, brands) runs on the model's *full* text before it is trimmed; then `normalisePlan` repairs structure and `repairSummary` drops off sentences (wrong pronouns, life stage, time of day) instead of rejecting them; one retry, then `basicPlan`. A plan is never shown if it names a listed allergen.
+- **Owner notes never go to the model.** They are scanned for danger words (`data/danger-terms.json`, whole-word, deliberately cautious) and shown back to the owner only. A real test showed a note leaking into a summary.
+- **Voice** is Constitution Article IX. Fixed owner-facing wording lives in `client/src/lib/voice.js` and the app-written notes in `server/src/services/planContent.js`; health and vet wording is calm: no puns, no emoji.
+- **Plans** are stored as ids, not prose (`plans.content`); `renderPlan` turns them into words when read, so wording fixes apply to old plans. One plan per cat per day; `checkin_stamp` drives the "your check-in changed" note.
+- **AI accent and motion.** Anything where the model is involved (buttons, labels, loading) uses the plum `ai` colour and the `SparkleIcon`, via `Button` variants `ai` and `aiSoft`; keep that mark exclusive to AI so it stays meaningful. Motion lives in `index.css` keyframes and always respects `prefers-reduced-motion`.

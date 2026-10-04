@@ -19,6 +19,10 @@
   --color-attention-soft: #fff1d6;
   --color-urgent: #b3261e;
   --color-urgent-soft: #fde7e5;
+  /* AI accent: used only where the model is involved (buttons, labels, the sparkle). */
+  --color-ai: #6b4a9e;
+  --color-ai-dark: #573a85;
+  --color-ai-soft: #efe7fa;
 
   --radius-card: 1.25rem;
   --shadow-card: 0 1px 2px rgb(43 38 35 / 0.06), 0 6px 18px rgb(43 38 35 / 0.06);
@@ -26,6 +30,10 @@
   --animate-pop: pop 220ms ease-out;
   --animate-rise: rise 250ms ease-out both;
   --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+  --animate-twinkle: twinkle 2.8s ease-in-out infinite;
+  --animate-float: float 3.2s ease-in-out infinite;
+  --animate-burst: burst 1100ms ease-out both;
+  --animate-fade: fade 350ms ease-out both;
 
   @keyframes pop {
     0% { transform: scale(0.8); opacity: 0; }
@@ -40,6 +48,23 @@
     0%, 100% { opacity: 0.55; }
     50% { opacity: 1; }
   }
+  @keyframes twinkle {
+    0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    50% { transform: scale(1.18) rotate(12deg); opacity: 0.85; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  @keyframes burst {
+    0% { opacity: 1; transform: translate(0, 0) scale(0.3) rotate(0deg); }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(70deg); }
+  }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 @layer base {
@@ -50,6 +75,12 @@
     font-size: 1rem;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
+    /* a soft peach glow and a touch of lilac (the AI accent) behind everything */
+    background:
+      radial-gradient(900px 420px at 92% -8%, #fde6d4 0%, transparent 62%),
+      radial-gradient(700px 360px at -8% 0%, #f0e8fb 0%, transparent 58%),
+      var(--color-page);
+    background-attachment: fixed;
   }
   :focus-visible {
     outline: 3px solid var(--color-primary);

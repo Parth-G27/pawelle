@@ -1,8 +1,9 @@
 import { NavLink } from 'react-router-dom'
-import { HomeIcon, TrackIcon } from './icons.jsx'
+import { HomeIcon, PlanIcon, TrackIcon } from './icons.jsx'
 
 const ITEMS = [
   { to: '/today', label: 'Today', Icon: HomeIcon },
+  { to: '/plan', label: 'Plan', Icon: PlanIcon },
   { to: '/track', label: 'Track', Icon: TrackIcon },
 ]
 
@@ -18,13 +19,23 @@ export default function Nav() {
           key={to}
           to={to}
           className={({ isActive }) =>
-            `flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-sm font-bold md:min-h-11 md:flex-none md:flex-row md:justify-start md:gap-3 md:rounded-full md:px-4 ${
+            `flex min-h-14 flex-1 flex-col items-center justify-center gap-0.5 text-sm font-bold transition-colors md:min-h-11 md:flex-none md:flex-row md:justify-start md:gap-3 md:rounded-full md:px-4 ${
               isActive ? 'text-primary-dark md:bg-primary-soft' : 'text-muted hover:text-ink'
             }`
           }
         >
-          <Icon />
-          {label}
+          {({ isActive }) => (
+            <>
+              <span
+                className={`flex items-center justify-center rounded-full px-5 py-1 transition-colors duration-200 md:p-0 ${
+                  isActive ? 'bg-primary-soft md:bg-transparent' : ''
+                }`}
+              >
+                <Icon />
+              </span>
+              {label}
+            </>
+          )}
         </NavLink>
       ))}
     </nav>

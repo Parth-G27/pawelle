@@ -46,7 +46,7 @@ describe('openDatabase', () => {
     const file = path.join(dir, 'pawelle.db')
     const db = openDatabase({ file })
     expect(db.pragma('foreign_keys', { simple: true })).toBe(1)
-    expect(db.prepare("select count(*) c from sqlite_master where name in ('pets','pet_photos','checkins')").get().c).toBe(3)
+    expect(db.prepare("select count(*) c from sqlite_master where name in ('pets','pet_photos','checkins','plans')").get().c).toBe(4)
     db.close()
     openDatabase({ file }).close()
     expect(fs.readdirSync(path.join(dir, 'backups'))).toHaveLength(1)

@@ -5,6 +5,7 @@ import Shell, { Logo } from './components/Shell.jsx'
 import PetProvider from './hooks/PetProvider.jsx'
 import { usePet } from './hooks/usePet.js'
 import PetProfile from './pages/PetProfile.jsx'
+import Plan from './pages/Plan.jsx'
 import Today from './pages/Today.jsx'
 import Track from './pages/Track.jsx'
 import Welcome from './pages/Welcome.jsx'
@@ -43,6 +44,7 @@ function Gate() {
       <Route path="/" element={<Home />} />
       <Route path="/welcome/:step?" element={<Welcome />} />
       <Route path="/today" element={<Today />} />
+      <Route path="/plan" element={<Plan />} />
       <Route path="/track" element={<Track />} />
       <Route path="/pet" element={<PetProfile />} />
       <Route path="*" element={<Navigate to="/" replace />} />

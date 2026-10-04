@@ -6,7 +6,7 @@ export function Chip({ selected, onClick, children, ...props }) {
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border-2 px-4 text-base font-semibold transition-colors ${
+      className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border-2 px-4 text-base font-semibold transition-all duration-150 motion-safe:active:scale-95 ${
         selected
           ? 'border-primary bg-primary-soft text-ink animate-pop'
           : 'border-line bg-surface text-ink hover:border-primary'

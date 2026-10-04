@@ -1,0 +1,11 @@
+{
+  "chicken": ["poultry", "hen"],
+  "turkey": ["poultry"],
+  "fish": ["salmon", "tuna", "sardine", "sardines", "mackerel", "cod", "trout", "anchovy", "anchovies", "herring", "seafood", "shellfish", "prawn", "prawns", "shrimp"],
+  "beef": ["steak", "veal"],
+  "pork": ["ham", "bacon"],
+  "lamb": ["mutton"],
+  "dairy": ["milk", "cheese", "cream", "yogurt", "yoghurt", "butter", "lactose"],
+  "grains": ["grain", "wheat", "rice", "corn", "maize", "oats", "oat", "barley", "rye", "gluten"],
+  "eggs": ["egg"]
+}

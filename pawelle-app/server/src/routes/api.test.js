@@ -36,7 +36,7 @@ const create = async (data = { name: 'Pinky' }) => (await json('/pets', 'POST', 
 
 describe('health', () => {
   it('reports the server is ok', async () => {
-    expect(await (await json('/health')).json()).toEqual({ server: 'ok' })
+    expect(await (await json('/health')).json()).toMatchObject({ server: 'ok' })
   })
 })
 

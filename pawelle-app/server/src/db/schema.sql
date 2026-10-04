@@ -42,3 +42,19 @@ CREATE TABLE IF NOT EXISTS checkins (
   UNIQUE (pet_id, date)
 );
 CREATE INDEX IF NOT EXISTS idx_checkins_pet_date ON checkins (pet_id, date DESC);
+
+CREATE TABLE IF NOT EXISTS plans (
+  id            INTEGER PRIMARY KEY,
+  pet_id        INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+  date          TEXT    NOT NULL,
+  kind          TEXT    NOT NULL DEFAULT 'daily',
+  source        TEXT    NOT NULL,
+  model         TEXT,
+  reason        TEXT,
+  content       TEXT    NOT NULL,
+  checkin_stamp TEXT,
+  created_at    TEXT    NOT NULL DEFAULT (datetime('now')),
+  updated_at    TEXT    NOT NULL DEFAULT (datetime('now')),
+  UNIQUE (pet_id, date, kind)
+);
+CREATE INDEX IF NOT EXISTS idx_plans_pet_date ON plans (pet_id, date DESC);

@@ -1,0 +1,12 @@
+[
+  { "id": "feather_wand", "label": "a feather-wand game", "energetic": false },
+  { "id": "string_toy", "label": "a string-toy game", "energetic": false },
+  { "id": "crinkle_ball", "label": "a crinkly-ball chase", "energetic": false },
+  { "id": "cardboard_box", "label": "a cardboard-box adventure", "energetic": false },
+  { "id": "puzzle_feeder", "label": "a puzzle-feeder game with their usual food", "energetic": false },
+  { "id": "window_watching", "label": "some cosy window-watching", "energetic": false },
+  { "id": "cuddle_time", "label": "a quiet cuddle and gentle brushing", "energetic": false },
+  { "id": "climbing", "label": "a climb on the cat tree", "energetic": true },
+  { "id": "tunnel", "label": "a run through a tunnel", "energetic": true },
+  { "id": "chase_the_toy_mouse", "label": "chasing a toy mouse", "energetic": true }
+]

@@ -1,0 +1,27 @@
+{
+  "toxic_food": [
+    "chocolate", "cocoa", "grape", "grapes", "raisin", "raisins", "sultana", "sultanas",
+    "onion", "onions", "garlic", "chive", "chives", "leek", "leeks", "xylitol",
+    "caffeine", "coffee", "alcohol", "raw dough"
+  ],
+  "toxic_plant": [
+    "lily", "lilies", "tulip", "tulips", "daffodil", "daffodils", "sago palm",
+    "oleander", "azalea", "rhododendron"
+  ],
+  "chemical": [
+    "antifreeze", "ethylene glycol", "rat poison", "rodenticide", "bleach",
+    "pesticide", "insecticide", "permethrin"
+  ],
+  "human_medicine": [
+    "paracetamol", "acetaminophen", "tylenol", "ibuprofen", "advil", "aspirin",
+    "naproxen", "painkiller", "painkillers", "antidepressant", "antidepressants"
+  ],
+  "emergency": [
+    "can't breathe", "cannot breathe", "trouble breathing", "difficulty breathing",
+    "struggling to breathe", "laboured breathing", "labored breathing", "gasping",
+    "open mouth breathing", "collapsed", "collapse", "seizure", "seizures",
+    "convulsion", "convulsions", "unconscious", "unresponsive", "blue gums",
+    "pale gums", "vomiting blood", "blood in", "bleeding", "hit by a car",
+    "can't pee", "cannot pee", "straining to pee"
+  ]
+}

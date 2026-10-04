@@ -53,4 +53,9 @@ export const deletePhoto = (id, slot) => request(`/pets/${id}/photos/${slot}`, {
 export const saveCheckin = (petId, date, payload) =>
   request(`/pets/${petId}/checkins/${date}`, { method: 'PUT', json: payload })
 export const listCheckins = (petId, days = 14) => request(`/pets/${petId}/checkins?days=${days}`)
+export const getPlan = (petId, date) => request(`/pets/${petId}/plans/${date}`)
+export const generatePlan = (petId, date, { basic = false } = {}) =>
+  request(`/pets/${petId}/plans/${date}/generate`, { method: 'POST', json: basic ? { mode: 'basic' } : {} })
+export const listPlans = (petId, days = 30) => request(`/pets/${petId}/plans?days=${days}`)
+export const getHealth = () => request('/health')
 export const photoUrl = (id, slot, version) => `/api/pets/${id}/photos/${slot}?v=${version}`
