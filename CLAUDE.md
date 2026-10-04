@@ -10,20 +10,32 @@ Pawelle is a local-first, offline pet well-being companion built for the Hacktob
 
 ## Current state
 
-Everything lives in `pawelle-app/`. Only the Vite + React 19 client scaffold exists (`src/App.jsx` is still template code). The planned `server/` (Express + SQLite + Ollama) and npm-workspaces layout (`client/`, `server/`) described in the overview are **not created yet**. The app currently lives at the repo root of `pawelle-app/`, so the workspace restructure is a pending decision.
+Everything lives in `pawelle-app/`, an npm-workspaces repo: `client/` (Vite + React 19 + Tailwind v4) and `server/` (Express + `better-sqlite3`). Feature 001 (pet profile and onboarding, photos) is implemented per `specs/001-pet-profile/`. Not built yet: check-ins, plans, Ollama and `safety.js` (the AI flow), weights, events, the four-tab nav (Today, Plan, Track, Ask). The Today screen is a placeholder shell.
 
-Known gap: `vite.config.js` and `src/index.css` use Tailwind (`@tailwindcss/vite`, `@import "tailwindcss"`), but `tailwindcss` and `@tailwindcss/vite` are not in `package.json` and not installed. `npm run dev` and `npm run build` will fail until they are added.
+Spec-driven workflow: the constitution is `.specify/memory/constitution.md`; each feature has `specs/NNN-name/{spec,plan,tasks}.md`. Update the spec first if behavior changes.
 
 ## Commands (run from `pawelle-app/`)
 
 ```bash
-npm run dev       # Vite dev server (client, :5173)
-npm run build     # production build to dist/
-npm run lint      # ESLint (flat config, JS/JSX)
-npm run preview   # serve the built bundle
+npm run dev                          # server (127.0.0.1:3001) + client (Vite, :5173, proxies /api)
+npm run build                        # production build of the client
+npm run lint                         # ESLint for client and server
+npm test                             # all Vitest tests (client + server)
+npx vitest run server/src/routes/api.test.js   # a single test file
+npx vitest run -t "completeness"     # tests by name
 ```
 
-No test runner is configured yet. The overview plans unit tests for `safety.js` and the allergy post-filter, plus one integration test with a mocked Ollama.
+`PORT` sets the Vite port; `PAWELLE_PORT` sets the API port (default 3001). Do not mix them up.
+
+## Architecture notes
+
+- **Database:** one SQLite file at `pawelle-app/data/pawelle.db` (gitignored). On every start `db/index.js` copies it to `data/backups/` (newest 5 kept) and applies numbered upgrade steps tracked by `PRAGMA user_version`. Photos are BLOBs in `pet_photos`, so deleting a pet cascades.
+- **"Not answered" vs "none":** `pets.allergies` and `pets.conditions` are `NULL` when unanswered and `[]` when the owner said none. Never treat `NULL` as "no allergies" in AI code.
+- **One error shape:** every API failure is `{ error: { code, message, fields? } }` with a friendly message; the client's `api/client.js` turns it into `ApiFailure`.
+- **Validation lives in the server** (`server/src/lib/petSchema.js`, zod). `client/src/lib/petForm.js` mirrors it for inline messages; keep the wording in sync.
+- **Photos:** the browser resizes to 800px and re-encodes via canvas (this also strips GPS); the server checks real file bytes (`lib/image.js`), max 1 MB, 2 per cat, never sent to the model.
+- **Onboarding draft** is kept in `localStorage` (`lib/draft.js`) so a half-finished setup resumes; the pet is created once at the end.
+- **Single pet:** `POST /api/pets` returns 409 if one exists. Routes keep the `/api/pets/:id` shape for later multi-pet.
 
 ## Constraints that shape every change
 

@@ -1,0 +1,33 @@
+export const BREEDS = [
+  'Mixed / domestic',
+  'Not sure',
+  'Domestic Shorthair',
+  'Domestic Longhair',
+  'Persian',
+  'Maine Coon',
+  'Siamese',
+  'Bengal',
+  'Ragdoll',
+  'British Shorthair',
+  'Scottish Fold',
+  'Sphynx',
+  'Abyssinian',
+  'Russian Blue',
+  'Birman',
+  'Norwegian Forest Cat',
+  'Burmese',
+  'Oriental Shorthair',
+  'Devon Rex',
+  'Cornish Rex',
+  'American Shorthair',
+  'Exotic Shorthair',
+  'Turkish Angora',
+  'Siberian',
+  'Himalayan',
+  'Tonkinese',
+  'Manx',
+  'Savannah',
+]
+
+export const COMMON_ALLERGIES = ['Chicken', 'Fish', 'Beef', 'Dairy', 'Grains', 'Eggs']
+export const COMMON_CONDITIONS = ['Overweight', 'Kidney', 'Urinary', 'Diabetes', 'Dental', 'Sensitive tummy']

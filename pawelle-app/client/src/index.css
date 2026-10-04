@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+
+  --color-page: #fff9f2;
+  --color-surface: #ffffff;
+  --color-ink: #2b2623;
+  --color-muted: #6f645c;
+  --color-line: #e6dacd;
+  --color-primary: #c2461e;
+  --color-primary-dark: #a33a17;
+  --color-primary-soft: #fde3d6;
+  --color-sage: #3f6b4c;
+  --color-sage-soft: #ddebdf;
+  --color-butter: #ffd98a;
+  --color-sky-soft: #d9ecf7;
+  --color-attention: #9a5b00;
+  --color-attention-soft: #fff1d6;
+  --color-urgent: #b3261e;
+  --color-urgent-soft: #fde7e5;
+
+  --radius-card: 1.25rem;
+  --shadow-card: 0 1px 2px rgb(43 38 35 / 0.06), 0 6px 18px rgb(43 38 35 / 0.06);
+
+  --animate-pop: pop 220ms ease-out;
+  --animate-rise: rise 250ms ease-out both;
+  --animate-shimmer: shimmer 1.4s ease-in-out infinite;
+
+  @keyframes pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    70% { transform: scale(1.06); opacity: 1; }
+    100% { transform: scale(1); }
+  }
+  @keyframes rise {
+    from { transform: translateY(8px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  @keyframes shimmer {
+    0%, 100% { opacity: 0.55; }
+    50% { opacity: 1; }
+  }
+}
+
+@layer base {
+  html { background: var(--color-page); }
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-ink);
+    font-size: 1rem;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+  dialog::backdrop { background: rgb(43 38 35 / 0.45); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
