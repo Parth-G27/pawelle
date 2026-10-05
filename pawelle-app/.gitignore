@@ -25,3 +25,17 @@ dist-ssr
 
 # Pawelle
 /data/
+
+# Secrets and private material: never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+.npmrc
+
+# Agent session transcripts can contain secrets and personal data
+*.jsonl

@@ -76,6 +76,10 @@ For example, to try a larger model: `ollama pull gemma3:4b`, then `OLLAMA_MODEL=
 
 Your data is one local SQLite file in `pawelle-app/data/` (never committed). A backup is made each time the server starts, keeping the newest five.
 
+## Privacy and security
+
+Everything stays on your machine: the data is one local SQLite file, the model runs through Ollama on `localhost`, and the app makes no external requests. The server only answers requests that genuinely come from this computer, and it has no accounts or tracking. More detail, and how to report a problem, in [SECURITY.md](SECURITY.md).
+
 ## Tests
 
 ```bash

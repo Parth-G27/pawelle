@@ -24,6 +24,12 @@ describe('chat', () => {
     expect(sent.body).toMatchObject({ model: 'gemma3:1b', stream: false, format: { type: 'object' } })
     expect(sent.body.options.temperature).toBe(0.3)
   })
+  it('never follows a redirect to somewhere else', async () => {
+    let init
+    const ai = make(async (_url, i) => { init = i; return json({ message: { content: '{}' } }) })
+    await ai.chat({ messages: [], schema: {} })
+    expect(init.redirect).toBe('error')
+  })
   it('maps a refused connection to offline (AC17)', async () => {
     const e = await rejects(make(refused).chat({ messages: [], schema: {} }))
     expect(e).toBeInstanceOf(OllamaError)

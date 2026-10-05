@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { hasLink } from './text.js'
 
 export const SEX = ['female', 'male', 'unknown']
 export const NEUTERED = ['yes', 'no', 'unknown']
@@ -19,12 +20,16 @@ const todayIso = () => new Date().toISOString().slice(0, 10)
 const optionalEnum = (values, message) =>
   z.enum(values, { error: message }).nullish().transform((v) => v ?? null)
 
+// One plain line: control characters (newlines and the like) become spaces.
+const flat = (s) => s.replace(/[\p{Cc}\s]+/gu, ' ').trim()
+const NO_LINK = 'Please leave out web addresses.'
+
 // Trim, drop empties, and de-duplicate case-insensitively (keep first spelling).
 export function cleanList(items) {
   const seen = new Set()
   const out = []
   for (const raw of items) {
-    const item = raw.trim().replace(/\s+/g, ' ')
+    const item = flat(raw)
     const key = item.toLowerCase()
     if (!item || seen.has(key)) continue
     seen.add(key)
@@ -40,7 +45,8 @@ const answerList = (label) =>
       z
         .string()
         .trim()
-        .max(LIMITS.listItemMax, `Each ${label} entry should be ${LIMITS.listItemMax} characters or fewer.`),
+        .max(LIMITS.listItemMax, `Each ${label} entry should be ${LIMITS.listItemMax} characters or fewer.`)
+        .refine((v) => !hasLink(v), NO_LINK),
       { error: `Please pick ${label} from the list or type them in.` },
     )
     .max(LIMITS.listMax, `That's a lot of ${label}. Keep it to ${LIMITS.listMax} or fewer.`)
@@ -50,9 +56,14 @@ const answerList = (label) =>
 export const petInputSchema = z.object({
   name: z
     .string({ error: "Please tell us your cat's name." })
-    .trim()
-    .min(1, "Please tell us your cat's name.")
-    .max(LIMITS.nameMax, `Names can be up to ${LIMITS.nameMax} characters.`),
+    .transform(flat)
+    .pipe(
+      z
+        .string()
+        .min(1, "Please tell us your cat's name.")
+        .max(LIMITS.nameMax, `Names can be up to ${LIMITS.nameMax} characters.`)
+        .refine((v) => !hasLink(v), NO_LINK),
+    ),
   sex: optionalEnum(SEX, 'Please pick one of the options.'),
   neutered: optionalEnum(NEUTERED, 'Please pick one of the options.'),
   birthdate: z
@@ -68,8 +79,13 @@ export const petInputSchema = z.object({
     .transform((v) => (v ? 1 : 0)),
   breed: z
     .string()
-    .trim()
-    .max(60, 'That breed name is a bit long. Try something shorter.')
+    .transform(flat)
+    .pipe(
+      z
+        .string()
+        .max(60, 'That breed name is a bit long. Try something shorter.')
+        .refine((v) => !hasLink(v), NO_LINK),
+    )
     .nullish()
     .transform((v) => (v ? v : null)),
   weight_kg: z
@@ -89,7 +105,11 @@ export const petInputSchema = z.object({
     .string()
     .max(LIMITS.notesMax, `Notes can be up to ${LIMITS.notesMax} characters.`)
     .nullish()
-    .transform((v) => (v && v.trim() ? v.trim() : null)),
+    // keep line breaks in notes, drop other control characters
+    .transform((v) => {
+      const t = v ? v.replace(/[^\P{Cc}\n\r\t]/gu, '').trim() : ''
+      return t || null
+    }),
 })
 
 // Turn a zod error into { field: friendly message } (first message per field).

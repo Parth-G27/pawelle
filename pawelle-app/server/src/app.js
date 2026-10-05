@@ -1,5 +1,6 @@
 import express from 'express'
 import { errorHandler, notFound } from './lib/errors.js'
+import { localOnly, securityHeaders } from './lib/security.js'
 import checkinsRoutes from './routes/checkins.js'
 import healthRoutes from './routes/health.js'
 import petsRoutes from './routes/pets.js'
@@ -21,6 +22,8 @@ export function createApp({ db, ai = noAi, planOptions } = {}) {
   const app = express()
   app.disable('x-powered-by')
   const plans = createPlanService({ db, ai, ...planOptions })
+  // Every API request: security headers first, then "is this really this computer?".
+  app.use('/api', securityHeaders(), localOnly())
   app.use('/api', healthRoutes(ai))
   app.use('/api', photosRoutes(db))
   app.use('/api', petsRoutes(db))

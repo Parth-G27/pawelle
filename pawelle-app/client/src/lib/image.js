@@ -16,7 +16,11 @@ export const blobToDataUrl = (blob) =>
     reader.readAsDataURL(blob)
   })
 
+// Only inline images: a tampered saved draft must never make the page fetch some other address.
 export async function dataUrlToBlob(dataUrl) {
+  if (typeof dataUrl !== 'string' || !/^data:image\/(jpeg|png|webp);base64,/i.test(dataUrl)) {
+    throw new PhotoError('That photo could not be read. Please add it again.')
+  }
   return (await fetch(dataUrl)).blob()
 }
 

@@ -1,6 +1,7 @@
 // The whole flow in one place: safety first, then one prompt in and one validated answer out.
 import { ApiError } from '../lib/errors.js'
 import { addDaysIso } from '../lib/dates.js'
+import { oneLine } from '../lib/text.js'
 import { describeAge, lifeStage } from '../lib/lifeStage.js'
 import { getCheckin, listCheckins } from '../db/checkins.js'
 import { checkinStamp, getPlanRow, isStale, upsertPlanRow } from '../db/plans.js'
@@ -15,6 +16,16 @@ import { planSafety } from './safety.js'
 export const DEADLINE_MS = 115_000 // the spec's "2 minutes"
 
 const asOf = (date) => new Date(`${date}T12:00:00Z`)
+
+// Defence in depth: even data saved before validation existed is flattened to one plain line
+// before it reaches the model's prompt or the owner's plan.
+const cleanList = (list) => (list == null ? list : list.map((x) => oneLine(x, 40)).filter(Boolean))
+export const safePet = (pet) => ({
+  ...pet,
+  name: oneLine(pet.name, 40) || 'your cat',
+  allergies: cleanList(pet.allergies),
+  conditions: cleanList(pet.conditions),
+})
 
 function offline(reason, model) {
   const message =
@@ -78,7 +89,8 @@ export function createPlanService({ db, ai, deadlineMs = DEADLINE_MS }) {
 
   return {
     // -> { plan | null, safety, generating }
-    getState(pet, date) {
+    getState(rawPet, date) {
+      const pet = safePet(rawPet)
       const { safety } = inputsFor(pet, date)
       const row = getPlanRow(db, pet.id, date)
       const plan =
@@ -89,7 +101,8 @@ export function createPlanService({ db, ai, deadlineMs = DEADLINE_MS }) {
     },
 
     // -> { status: 'blocked', safety } | { status: 'ok', plan }
-    async generate(pet, date, { mode } = {}) {
+    async generate(rawPet, date, { mode } = {}) {
+      const pet = safePet(rawPet)
       const { today, safety } = inputsFor(pet, date)
       if (safety.blocked) return { status: 'blocked', safety } // the model is never called
       if (busy.has(pet.id)) throw new ApiError(409, 'BUSY', "I'm already working on it!")

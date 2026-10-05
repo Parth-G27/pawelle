@@ -52,3 +52,18 @@ describe('openDatabase', () => {
     expect(fs.readdirSync(path.join(dir, 'backups'))).toHaveLength(1)
   })
 })
+
+describe('database privacy on disk', () => {
+  it.skipIf(process.platform === 'win32')('keeps the database and its backups private to this user (0600)', () => {
+    const dir = tmp()
+    const file = path.join(dir, 'data', 'pawelle.db')
+    openDatabase({ file }).close()
+    openDatabase({ file }).close() // second start makes a backup
+    const mode = (f) => fs.statSync(f).mode & 0o777
+    expect(mode(file)).toBe(0o600)
+    const backups = path.join(dir, 'data', 'backups')
+    expect(mode(backups)).toBe(0o700)
+    for (const f of fs.readdirSync(backups)) expect(mode(path.join(backups, f))).toBe(0o600)
+    expect(mode(path.join(dir, 'data'))).toBe(0o700)
+  })
+})

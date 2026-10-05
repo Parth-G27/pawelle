@@ -25,7 +25,7 @@ export function createOllama({ url = DEFAULT_URL, model = DEFAULT_MODEL, fetchIm
 
   async function call(path, init, timeoutMs) {
     try {
-      return await fetchImpl(`${base}${path}`, { ...init, signal: AbortSignal.timeout(timeoutMs) })
+      return await fetchImpl(`${base}${path}`, { ...init, redirect: 'error', signal: AbortSignal.timeout(timeoutMs) })
     } catch (e) {
       if (isTimeout(e)) throw new OllamaError('timeout')
       throw new OllamaError('offline')
